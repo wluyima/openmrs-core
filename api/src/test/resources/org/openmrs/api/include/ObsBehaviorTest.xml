@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    This Source Code Form is subject to the terms of the Mozilla Public License,
+    v. 2.0. If a copy of the MPL was not distributed with this file, You can
+    obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+    the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+
+    Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+    graphic logo is a trademark of OpenMRS Inc.
+
+-->
+<dataset>
+    <encounter encounter_id="201" encounter_type="2" patient_id="7" location_id="1" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-01 00:00:00.0" voided="false" uuid="4519d653-393b-4118-9c83-a3715b82d4ac" />
+    <encounter_provider encounter_provider_id="301" encounter_id="201" provider_id="1" encounter_role_id="1" creator="1" date_created="2008-08-01 00:00:00.0" voided="false" uuid="23e0aae8-20ee-46b7-ade6-9e68f897b7a9" />
+    <obs obs_id="101" person_id="7" concept_id="5089" encounter_id="201" obs_datetime="2008-08-01 00:00:00.0" location_id="1" value_numeric="80.0" creator="1" date_created="2008-08-01 00:00:00.0" voided="true" voided_by="1" void_reason="none" date_voided="2008-08-01 00:00:00.0" uuid="za3a4d7a-f9ab-47bb-aaad-bc0b452fcda4" />
+    <obs obs_id="102" person_id="7" concept_id="5089" encounter_id="201" obs_datetime="2008-08-01 00:00:00.0" location_id="1" value_numeric="82.0" creator="1" date_created="2008-08-01 00:00:00.0" voided="false" uuid="x7499df2-b17c-4b39-88a6-44591c165569"/>
+    <obs obs_id="103" person_id="7" concept_id="5497" encounter_id="201" obs_datetime="2008-08-01 00:00:00.0" location_id="1" value_numeric="175.0" creator="1" date_created="2008-08-01 00:00:00.0" voided="false" uuid="efbba444-51ca-428b-8671-4f4eede10b4b" />
+    <obs obs_id="104" person_id="7" concept_id="5497" encounter_id="201" obs_datetime="2008-08-01 00:00:00.0" location_id="1" value_numeric="1756.0" creator="1" date_created="2008-08-01 00:00:00.0" voided="false" uuid="344cb55d-69ab-4009-8256-f4750e8770ee" />
+</dataset>

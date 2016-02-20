@@ -191,6 +191,10 @@ public class EncounterServiceImpl extends BaseOpenmrsService implements Encounte
 				Context.getOrderService().saveOrder(o, null);
 			}
 		}
+
+        for (Obs o : encounter.getObs()) {
+            Context.getObsService().saveObs(o, "cdcd");
+        }
 		return encounter;
 	}
 	

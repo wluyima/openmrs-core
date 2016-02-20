@@ -29,10 +29,12 @@ import org.openmrs.util.PrivilegeConstants;
  * The ObsService deals with saving and getting Obs to/from the database Usage:
  * 
  * <pre>
- *  ObsService obsService = Context.getObsService();
  * 
- *  // get the obs for patient with internal identifier of 1235
- *  List&lt;Obs&gt; someObsList = obsService.getObservationsByPerson(new Patient(1235));
+ * 
+ * ObsService obsService = Context.getObsService();
+ * 
+ * // get the obs for patient with internal identifier of 1235
+ * List&lt;Obs&gt; someObsList = obsService.getObservationsByPerson(new Patient(1235));
  * </pre>
  * 
  * There are also a number of convenience methods for extracting obs pertaining to certain Concepts,
@@ -54,7 +56,7 @@ public interface ObsService extends OpenmrsService {
 	
 	/**
 	 * Get an observation
-	 * 
+	 *
 	 * @param obsId integer obsId of observation desired
 	 * @return matching Obs
 	 * @throws APIException
@@ -100,8 +102,9 @@ public interface ObsService extends OpenmrsService {
 	 * @should cascade update to new child obs groups
 	 * @should link original and updated obs
 	 * @should set void reason message to changeMessage
+	 * @should update an already voided Obs without creating a new one
 	 */
-	@Authorized( { PrivilegeConstants.ADD_OBS, PrivilegeConstants.EDIT_OBS })
+	@Authorized({ PrivilegeConstants.ADD_OBS, PrivilegeConstants.EDIT_OBS })
 	public Obs saveObs(Obs obs, String changeMessage) throws APIException;
 	
 	/**

@@ -50,6 +50,7 @@ import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.Role;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.ObsServiceImpl;
 import org.openmrs.obs.ComplexData;
@@ -386,8 +387,8 @@ public class ObsServiceTest extends BaseContextSensitiveTest {
 		
 		Date sd = df.parse("2006-02-13");
 		Date ed = df.parse("2006-02-13");
-		List<Obs> obs = os.getObservations(null, null, null, null, null, null, null, null, null, sd, OpenmrsUtil
-		        .getLastMomentOfDay(ed), false);
+		List<Obs> obs = os.getObservations(null, null, null, null, null, null, null, null, null, sd,
+		    OpenmrsUtil.getLastMomentOfDay(ed), false);
 		assertEquals(1, obs.size());
 	}
 	
@@ -1414,7 +1415,7 @@ public class ObsServiceTest extends BaseContextSensitiveTest {
 		o.setObsDatetime(new Date());
 		o.setLocation(new Location(1));
 		o.setValueNumeric(50d);
-		
+
 		Obs oSaved = Context.getObsService().saveObs(o, null);
 		
 		// make sure the returned Obs and the passed in obs
@@ -1787,5 +1788,25 @@ public class ObsServiceTest extends BaseContextSensitiveTest {
 
 		Assert.assertNull(obsService.getObs(orderReferencingObsId));
 		Assert.assertNotNull(orderService.getOrder(referencedOrderId));
+	}
+	
+	/**
+	 * @see ObsService#saveObs(Obs,String)
+	 * @verifies update an already voided Obs without creating a new one
+	 */
+	@Test
+	public void saveObs_shouldUpdateAnAlreadyVoidedObsWithoutCreatingANewOne() throws Exception {
+        executeDataSet(INITIAL_OBS_XML);
+        ObsService os = Context.getObsService();
+		Obs o = os.getObs(10);
+		Person person = o.getPerson();
+		int originalObsCount = os.getObservationsByPerson(person).size();
+		assertTrue(o.getVoided());
+		final String newTextValue = "some value";
+		o.setValueText(newTextValue);
+		Obs newObs = os.saveObs(o, "some message");
+		assertEquals(o, newObs);
+		assertEquals(originalObsCount, os.getObservationsByPerson(person).size());
+        Context.flushSession();
 	}
 }

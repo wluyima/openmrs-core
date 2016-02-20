@@ -21,7 +21,7 @@ import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
 import org.openmrs.Retireable;
 import org.openmrs.Voidable;
-import org.openmrs.api.APIException;
+import org.openmrs.api.IllegalPropertyChangeException;
 import org.openmrs.util.OpenmrsUtil;
 
 /**
@@ -75,7 +75,7 @@ public abstract class ImmutableEntityInterceptor extends EmptyInterceptor {
 	 */
 	@Override
 	public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState,
-	        String[] propertyNames, Type[] types) {
+	                            String[] propertyNames, Type[] types) {
 		
 		if (getSupportedType().isAssignableFrom(entity.getClass())) {
 			List<String> changedProperties = null;
@@ -87,9 +87,9 @@ public abstract class ImmutableEntityInterceptor extends EmptyInterceptor {
 				
 				boolean isVoidedOrRetired = false;
 				if (Voidable.class.isAssignableFrom(entity.getClass())) {
-					isVoidedOrRetired = ((Voidable) entity).isVoided();
+					isVoidedOrRetired = ((Voidable) entity).getVoided();
 				} else if (Retireable.class.isAssignableFrom(entity.getClass())) {
-					isVoidedOrRetired = ((Retireable) entity).isRetired();
+					isVoidedOrRetired = ((Retireable) entity).getRetired();
 				}
 				if (isVoidedOrRetired && ignoreVoidedOrRetiredObjects()) {
 					continue;
@@ -108,7 +108,8 @@ public abstract class ImmutableEntityInterceptor extends EmptyInterceptor {
 				if (log.isDebugEnabled()) {
 					log.debug("The following fields cannot be changed for " + getSupportedType() + ":" + changedProperties);
 				}
-				throw new APIException("editing.fields.not.allowed", new Object[] { getSupportedType().getSimpleName() });
+				throw new IllegalPropertyChangeException("Editing some fields on " + getSupportedType().getSimpleName()
+				        + " is not allowed");
 			}
 		}
 		

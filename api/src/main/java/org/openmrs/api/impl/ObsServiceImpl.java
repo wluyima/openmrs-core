@@ -115,44 +115,50 @@ public class ObsServiceImpl extends BaseOpenmrsService implements ObsService {
 			// get a copy of the passed in obs and save it to the
 			// database. This allows us to create a new row and new obs_id
 			// this method doesn't copy the obs_id
-			Obs newObs = Obs.newInstance(obs);
-			
-			// unset any voided properties on the new obs
-			newObs.setVoided(false);
-			newObs.setVoidReason(null);
-			newObs.setDateVoided(null);
-			newObs.setVoidedBy(null);
-			// unset the creation stats
-			newObs.setCreator(null);
-			newObs.setDateCreated(null);
-			newObs.setPreviousVersion(obs);
-			
-			RequiredDataAdvice.recursivelyHandle(SaveHandler.class, newObs, changeMessage);
-			
-			// save the new row to the database with the changes that
-			// have been made to it
-			dao.saveObs(newObs);
-			
-			// void out the original observation to keep it around for
-			// historical purposes
-			try {
-				Context.addProxyPrivilege(PrivilegeConstants.DELETE_OBS);
+			if (obs.getVoided()) {
+				dao.saveObs(obs);
+				return obs;
+			} else {
+				Obs newObs = Obs.newInstance(obs);
 				
-				// fetch a clean copy of this obs from the database so that
-				// we don't write the changes to the database when we save
-				// the fact that the obs is now voided
-				Context.evictFromSession(obs);
-				obs = Context.getObsService().getObs(obs.getObsId());
+				// unset any voided properties on the new obs
+				newObs.setVoided(false);
+				newObs.setVoidReason(null);
+				newObs.setDateVoided(null);
+				newObs.setVoidedBy(null);
+				// unset the creation stats
+				newObs.setCreator(null);
+				newObs.setDateCreated(null);
+				newObs.setPreviousVersion(obs);
 				
-				// calling this via the service so that AOP hooks are called
-				Context.getObsService().voidObs(obs, changeMessage);
+				RequiredDataAdvice.recursivelyHandle(SaveHandler.class, newObs, changeMessage);
 				
+				// save the new row to the database with the changes that
+				// have been made to it
+				dao.saveObs(newObs);
+				
+				// void out the original observation to keep it around for
+				// historical purposes
+				try {
+					Context.addProxyPrivilege(PrivilegeConstants.DELETE_OBS);
+					
+					// fetch a clean copy of this obs from the database so that
+					// we don't write the changes to the database when we save
+					// the fact that the obs is now voided
+					Context.evictFromSession(obs);
+					obs = Context.getObsService().getObs(obs.getObsId());
+					
+					// calling this via the service so that AOP hooks are called
+					Context.getObsService().voidObs(obs, changeMessage);
+					
+				}
+				finally {
+					Context.removeProxyPrivilege(PrivilegeConstants.DELETE_OBS);
+				}
+				
+				return newObs;
 			}
-			finally {
-				Context.removeProxyPrivilege(PrivilegeConstants.DELETE_OBS);
-			}
 			
-			return newObs;
 		}
 	}
 	
