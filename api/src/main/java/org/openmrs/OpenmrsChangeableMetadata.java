@@ -11,29 +11,18 @@ package org.openmrs;
 
 import java.util.Date;
 
-/**
- * In OpenMRS, we distinguish between data and metadata within our data model. Data (as opposed to
- * metadata) generally represent person- or patient-specific data. OpenMRS objects that represent
- * person- or patient-specific data should implement this interface.
- * 
- * @see OpenmrsMetadata
- * @since 1.5
- */
-public interface OpenmrsData extends OpenmrsObject, Auditable, Voidable {
+public interface OpenmrsChangeableMetadata extends OpenmrsMetadata {
 	
 	@Override
-	@Deprecated
 	User getChangedBy();
 	
 	@Override
-	@Deprecated
 	Date getDateChanged();
 	
 	@Override
-	@Deprecated
 	void setChangedBy(User changedBy);
 	
 	@Override
-	@Deprecated
 	void setDateChanged(Date dateChanged);
+	
 }

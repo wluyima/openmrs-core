@@ -27,7 +27,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  * @see OpenmrsData
  */
 @MappedSuperclass
-public abstract class BaseOpenmrsData extends BaseOpenmrsObject implements OpenmrsData {
+@Deprecated
+public abstract class BaseOpenmrsData extends BaseOpenmrsObject implements OpenmrsChangeableData {
 	
 	//***** Properties *****
 	@ManyToOne(optional = false)
