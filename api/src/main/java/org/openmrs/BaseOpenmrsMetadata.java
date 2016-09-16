@@ -29,7 +29,7 @@ import org.hibernate.search.annotations.Field;
  * @see OpenmrsMetadata
  */
 @MappedSuperclass
-public abstract class BaseOpenmrsMetadata extends BaseOpenmrsObject implements OpenmrsMetadata {
+public abstract class BaseOpenmrsMetadata extends BaseOpenmrsObject implements OpenmrsChangeableMetadata {
 	
 	//***** Properties *****
 	@Column(name = "name", nullable = false, length = 255)
