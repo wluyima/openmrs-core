@@ -9,20 +9,6 @@
  */
 package org.openmrs;
 
-import java.util.Date;
+public interface OpenmrsChangeableData extends OpenmrsData, Changeable {
 
-public interface OpenmrsChangeableData extends OpenmrsData {
-	
-	@Override
-	User getChangedBy();
-	
-	@Override
-	Date getDateChanged();
-	
-	@Override
-	void setChangedBy(User changedBy);
-	
-	@Override
-	void setDateChanged(Date dateChanged);
-	
 }

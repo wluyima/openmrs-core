@@ -9,8 +9,6 @@
  */
 package org.openmrs;
 
-import java.util.Date;
-
 /**
  * In OpenMRS, we distinguish between data and metadata within our data model. Metadata represent
  * system and descriptive data such as data types &mdash; a relationship type or encounter type.
@@ -21,7 +19,7 @@ import java.util.Date;
  * @see OpenmrsData
  * @since 1.5
  */
-public interface OpenmrsMetadata extends OpenmrsObject, Auditable, Retireable {
+public interface OpenmrsMetadata extends Creatable, Retireable {
 	
 	/**
 	 * @return the name
@@ -42,20 +40,4 @@ public interface OpenmrsMetadata extends OpenmrsObject, Auditable, Retireable {
 	 * @param description the description to set
 	 */
 	public void setDescription(String description);
-	
-	@Override
-	@Deprecated
-	User getChangedBy();
-	
-	@Override
-	@Deprecated
-	Date getDateChanged();
-	
-	@Override
-	@Deprecated
-	void setChangedBy(User changedBy);
-	
-	@Override
-	@Deprecated
-	void setDateChanged(Date dateChanged);
 }

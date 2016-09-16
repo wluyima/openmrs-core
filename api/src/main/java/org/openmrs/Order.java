@@ -9,14 +9,14 @@
  */
 package org.openmrs;
 
+import java.util.Date;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.APIException;
 import org.openmrs.api.db.hibernate.HibernateUtil;
 import org.openmrs.order.OrderUtil;
 import org.openmrs.util.OpenmrsUtil;
-
-import java.util.Date;
 
 /**
  * Encapsulates information about the clinical action of a provider requesting something for a
@@ -32,28 +32,22 @@ import java.util.Date;
  * 
  * @version 1.0
  */
-public class Order extends BaseOpenmrsData {
-	
+public class Order extends BaseOpenmrsUnchangeableData {
 	
 	public static final long serialVersionUID = 4334343L;
-	
+
 	/**
 	 * @since 1.9.2, 1.10
 	 */
 	public enum Urgency {
-		ROUTINE,
-		STAT,
-		ON_SCHEDULED_DATE
+		ROUTINE, STAT, ON_SCHEDULED_DATE
 	}
 	
 	/**
 	 * @since 1.10
 	 */
 	public enum Action {
-		NEW,
-		REVISE,
-		DISCONTINUE,
-		RENEW
+		NEW, REVISE, DISCONTINUE, RENEW
 	}
 	
 	private static final Log log = LogFactory.getLog(Order.class);
@@ -162,7 +156,7 @@ public class Order extends BaseOpenmrsData {
 		target.setOrderReason(getOrderReason());
 		target.setOrderReasonNonCoded(getOrderReasonNonCoded());
 		target.setAccessionNumber(getAccessionNumber());
-		target.setVoided(isVoided());
+		target.setVoided(getVoided());
 		target.setVoidedBy(getVoidedBy());
 		target.setDateVoided(getDateVoided());
 		target.setVoidReason(getVoidReason());
@@ -172,8 +166,8 @@ public class Order extends BaseOpenmrsData {
 		target.action = getAction();
 		target.orderNumber = getOrderNumber();
 		target.setCareSetting(getCareSetting());
-		target.setChangedBy(getChangedBy());
-		target.setDateChanged(getDateChanged());
+		//target.setChangedBy(getChangedBy());
+		//target.setDateChanged(getDateChanged());
 		target.setScheduledDate(getScheduledDate());
 		target.setOrderGroup(getOrderGroup());
 		target.setSortWeight(getSortWeight());
@@ -421,7 +415,7 @@ public class Order extends BaseOpenmrsData {
 	 * @should return false for a discontinuation order
 	 */
 	public boolean isActive(Date checkDate) {
-		if (isVoided() || action == Action.DISCONTINUE) {
+		if (getVoided() || action == Action.DISCONTINUE) {
 			return false;
 		}
 		if (checkDate == null) {
@@ -459,7 +453,7 @@ public class Order extends BaseOpenmrsData {
 	 * @should return true if the order is started and not scheduled
 	 */
 	public boolean isStarted(Date checkDate) {
-		if (isVoided()) {
+		if (getVoided()) {
 			return false;
 		}
 		if (checkDate == null) {
@@ -492,7 +486,7 @@ public class Order extends BaseOpenmrsData {
 		if (dateStopped != null && autoExpireDate != null && dateStopped.after(autoExpireDate)) {
 			throw new APIException("Order.error.invalidDateStoppedAndAutoExpireDate", (Object[]) null);
 		}
-		if (isVoided()) {
+		if (getVoided()) {
 			return false;
 		}
 		if (checkDate == null) {
@@ -534,7 +528,7 @@ public class Order extends BaseOpenmrsData {
 		if (dateStopped != null && autoExpireDate != null && dateStopped.after(autoExpireDate)) {
 			throw new APIException("Order.error.invalidDateStoppedAndAutoExpireDate", (Object[]) null);
 		}
-		if (isVoided()) {
+		if (getVoided()) {
 			return false;
 		}
 		if (checkDate == null) {

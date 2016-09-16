@@ -20,12 +20,12 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.CallbackException;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
-import org.openmrs.Auditable;
+import org.openmrs.Changeable;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.api.context.Context;
 
 /**
- * This class looks for {@link OpenmrsObject} and {@link Auditable} that are being inserted into the
+ * This class looks for {@link OpenmrsObject} and  that are being inserted into the
  * database. The creator and dateCreated fields are set when inserting or updating objects and the
  * fields are still null. If the class is an update (instead of an insert) then the changedBy and
  * dateChanged fields are set to the current user and the current time. <br>
@@ -77,7 +77,7 @@ public class AuditableInterceptor extends EmptyInterceptor {
 		
 		objectWasChanged = setCreatorAndDateCreatedIfNull(entity, currentState, propertyNames);
 		
-		if (entity instanceof Auditable && propertyNames != null) {
+		if (entity instanceof Changeable && propertyNames != null) {
 			if (log.isDebugEnabled()) {
 				log.debug("Setting changed by fields on " + entity.getClass());
 			}
