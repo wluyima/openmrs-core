@@ -9,20 +9,7 @@
  */
 package org.openmrs;
 
-import java.util.Date;
+//This can implement Changeable instead if we can get rid of Auditable
+public interface OpenmrsChangeableData extends OpenmrsData, Auditable {
 
-public interface OpenmrsChangeableData extends OpenmrsData {
-	
-	@Override
-	User getChangedBy();
-	
-	@Override
-	Date getDateChanged();
-	
-	@Override
-	void setChangedBy(User changedBy);
-	
-	@Override
-	void setDateChanged(Date dateChanged);
-	
 }

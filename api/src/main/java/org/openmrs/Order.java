@@ -32,7 +32,7 @@ import java.util.Date;
  * 
  * @version 1.0
  */
-public class Order extends BaseOpenmrsData {
+public class Order extends BaseOpenmrsUnchangeableData {
 	
 	
 	public static final long serialVersionUID = 4334343L;
@@ -172,8 +172,8 @@ public class Order extends BaseOpenmrsData {
 		target.action = getAction();
 		target.orderNumber = getOrderNumber();
 		target.setCareSetting(getCareSetting());
-		target.setChangedBy(getChangedBy());
-		target.setDateChanged(getDateChanged());
+		//target.setChangedBy(getChangedBy());
+		//target.setDateChanged(getDateChanged());
 		target.setScheduledDate(getScheduledDate());
 		target.setOrderGroup(getOrderGroup());
 		target.setSortWeight(getSortWeight());

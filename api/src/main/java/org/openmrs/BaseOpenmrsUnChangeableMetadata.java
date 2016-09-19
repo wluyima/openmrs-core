@@ -1,0 +1,188 @@
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * 
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+package org.openmrs;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+@MappedSuperclass
+public abstract class BaseOpenmrsUnchangeableMetadata extends BaseOpenmrsObject implements OpenmrsUnchangeableMetadata {
+	
+	//***** Properties *****
+	@Column(name = "name", nullable = false, length = 255)
+	@org.hibernate.search.annotations.Field
+	private String name;
+	
+	@Column(name = "description", length = 255)
+	private String description;
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "creator")
+	private User creator;
+	
+	@Column(name = "date_created", nullable = false)
+	private Date dateCreated;
+	
+	@Column(name = "retired", nullable = false)
+	@org.hibernate.search.annotations.Field
+	private Boolean retired = Boolean.FALSE;
+	
+	@Column(name = "date_retired")
+	private Date dateRetired;
+	
+	@ManyToOne
+	@JoinColumn(name = "retired_by")
+	private User retiredBy;
+	
+	@Column(name = "retire_reason", length = 255)
+	private String retireReason;
+	
+	//***** Constructors *****
+	
+	/**
+	 * Default Constructor
+	 */
+	public BaseOpenmrsUnchangeableMetadata() {
+	}
+	
+	//***** Property Access *****
+	
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	/**
+	 * @see org.openmrs.Auditable#getCreator()
+	 */
+	public User getCreator() {
+		return creator;
+	}
+	
+	/**
+	 * @see org.openmrs.Auditable#setCreator(org.openmrs.User)
+	 */
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+	
+	/**
+	 * @see org.openmrs.Auditable#getDateCreated()
+	 */
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+	
+	/**
+	 * @see org.openmrs.Auditable#setDateCreated(java.util.Date)
+	 */
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+	
+	/**
+	 * @deprecated as of 2.0, use {@link #getRetired()}
+	 * @see org.openmrs.Retireable#isRetired()
+	 */
+	@Deprecated
+	@JsonIgnore
+	public Boolean isRetired() {
+		return getRetired();
+	}
+	
+	/**
+	 * This method delegates to {@link #isRetired()}. This is only needed for jstl syntax like
+	 * ${fieldType.retired} because the return type is a Boolean object instead of a boolean
+	 * primitive type.
+	 *
+	 * @see org.openmrs.Retireable#isRetired()
+	 */
+	public Boolean getRetired() {
+		return retired;
+	}
+	
+	/**
+	 * @see org.openmrs.Retireable#setRetired(java.lang.Boolean)
+	 */
+	public void setRetired(Boolean retired) {
+		this.retired = retired;
+	}
+	
+	/**
+	 * @see org.openmrs.Retireable#getDateRetired()
+	 */
+	public Date getDateRetired() {
+		return dateRetired;
+	}
+	
+	/**
+	 * @see org.openmrs.Retireable#setDateRetired(java.util.Date)
+	 */
+	public void setDateRetired(Date dateRetired) {
+		this.dateRetired = dateRetired;
+	}
+	
+	/**
+	 * @see org.openmrs.Retireable#getRetiredBy()
+	 */
+	public User getRetiredBy() {
+		return retiredBy;
+	}
+	
+	/**
+	 * @see org.openmrs.Retireable#setRetiredBy(org.openmrs.User)
+	 */
+	public void setRetiredBy(User retiredBy) {
+		this.retiredBy = retiredBy;
+	}
+	
+	/**
+	 * @see org.openmrs.Retireable#getRetireReason()
+	 */
+	public String getRetireReason() {
+		return retireReason;
+	}
+	
+	/**
+	 * @see org.openmrs.Retireable#setRetireReason(java.lang.String)
+	 */
+	public void setRetireReason(String retireReason) {
+		this.retireReason = retireReason;
+	}
+}
