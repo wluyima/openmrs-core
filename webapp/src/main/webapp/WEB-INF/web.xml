@@ -312,5 +312,25 @@
 	        <http-only>true</http-only>
 	    </cookie-config>
 	</session-config>
+    <servlet>
+        <servlet-name>vaadinServlet</servlet-name>
+        <servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
+        <init-param>
+            <param-name>UI</param-name>
+            <param-value>org.openmrs.web.HelloWorldUI</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>vaadinServlet</servlet-name>
+        <url-pattern>/vaadin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>vaadinServlet</servlet-name>
+        <url-pattern>/vaadin/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>vaadinServlet</servlet-name>
+        <url-pattern>/VAADIN/*</url-pattern>
+    </servlet-mapping>
 
 </web-app>
