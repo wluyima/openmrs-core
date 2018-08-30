@@ -10,82 +10,26 @@
     graphic logo is a trademark of OpenMRS Inc.
 
 -->
-<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
-<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+<Configuration name="core" status="trace">
 
-	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern"
-				value="%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n" />
-		</layout>
-	</appender>
-	
-	<appender name="MEMORY_APPENDER" class="org.openmrs.util.MemoryAppender">
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern"
-				value="%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n" />
-		</layout>
-	</appender>	
-	
-	<appender name="DEBUGGING_FILE_APPENDER" class="org.apache.log4j.RollingFileAppender">
-      <param name="append" value="false"/>
-      <param name="file" value="openmrs.log"/>
-      <layout class="org.apache.log4j.PatternLayout">
-         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
-      </layout>
-   </appender>
+	<Appenders>
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<PatternLayout pattern="%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n" />
+		</Console>
+	</Appenders>
 
-	<logger name="org.apache">
-		<level value="WARN" />
-	</logger>
+	<Logger name="org.openmrs" level="debug" additivity="false">
+		<ThreadContextMapFilter>
+			<KeyValuePair key="test" value="123"/>
+		</ThreadContextMapFilter>
+		<AppenderRef ref="CONSOLE"/>
+	</Logger>
 	
-	<logger name="org.hibernate">
-		<level value="ERROR" />
-	</logger>
-	
-	<logger name="net.sf.ehcache">
-		<level value="ERROR" />
-	</logger>
+	<Loggers>
+		<Root level="WARN">
+			<AppenderRef ref="CONSOLE"/>
+		</Root>
+	</Loggers>
 
-	<logger name="org.springframework">
-		<level value="WARN" />
-	</logger>
-	
-	<logger name="org.openmrs">
-		<level value="WARN" />
-	</logger>
-	
-	<!-- 
-		This controls the LoggingAdvice class that wraps around the OpenMRS services 
-		WARN == don't log anything special for the services
-		INFO == log all setters
-		DEBUG == log all setters & log all getters & log execution time
-	-->
-	<logger name="org.openmrs.api">
-		<level value="INFO" />
-	</logger>
-
-	<logger name="org.apache.fop">
-		<level value="ERROR" />
-	</logger>
-	
-	<!-- Hide the useless MissingResourceException -->
-	<logger name="org.springframework.context.support.ResourceBundleMessageSource">
-		<level value="ERROR" />
-	</logger>
-	
-	<logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory">
-		<level value="ERROR" />
-	</logger>
-	
-	<root>
-		<level value="WARN" />
-		<appender-ref ref="CONSOLE" />
-		<appender-ref ref="MEMORY_APPENDER" />
-		<!--
-		<appender-ref ref="DEBUGGING_FILE_APPENDER" />
-		-->
-	</root>
-
-</log4j:configuration>
+</Configuration>

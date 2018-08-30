@@ -13,15 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
-import org.apache.log4j.AppenderSkeleton;
+
+/*import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.log4j.spi.LoggingEvent;*/
 
 /**
  * This class stores a few lines of the output to the log file. This class is set in the log4j
  * descriptor file: /metadata/api/log4j/log4j.xml
  */
-public class MemoryAppender extends AppenderSkeleton {
+public class MemoryAppender {
 	
 	private CircularFifoBuffer buffer;
 	
@@ -30,6 +31,7 @@ public class MemoryAppender extends AppenderSkeleton {
 	public MemoryAppender() {
 	}
 	
+	/*
 	@Override
 	protected void append(LoggingEvent loggingEvent) {
 		if (buffer != null) {
@@ -61,7 +63,7 @@ public class MemoryAppender extends AppenderSkeleton {
 		}
 		return logLines;
 	}
-	
+	*/
 	public int getBufferSize() {
 		return bufferSize;
 	}

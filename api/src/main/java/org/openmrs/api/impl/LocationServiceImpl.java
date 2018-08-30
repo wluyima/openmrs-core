@@ -27,6 +27,8 @@ import org.openmrs.api.db.LocationDAO;
 import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -42,7 +44,7 @@ import org.springframework.util.StringUtils;
  */
 @Transactional
 public class LocationServiceImpl extends BaseOpenmrsService implements LocationService {
-	
+	private Logger log = LoggerFactory.getLogger(getClass());
 	private LocationDAO dao;
 	
 	/**
@@ -159,6 +161,7 @@ public class LocationServiceImpl extends BaseOpenmrsService implements LocationS
 	@Override
 	@Transactional(readOnly = true)
 	public Location getLocationByUuid(String uuid) throws APIException {
+		log.warn("FETCHING LOCATION BY ID: "+uuid);
 		return dao.getLocationByUuid(uuid);
 	}
 	

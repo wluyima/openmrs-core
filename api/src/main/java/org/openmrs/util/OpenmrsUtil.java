@@ -67,12 +67,12 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Appender;
+/*import org.apache.log4j.Appender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.apache.log4j.RollingFileAppender;
+import org.apache.log4j.RollingFileAppender;*/
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.ConceptNumeric;
@@ -508,7 +508,7 @@ public class OpenmrsUtil {
 	 * @since 1.9.2
 	 */
 	public static void setupLogAppenders() {
-		Logger rootLogger = Logger.getRootLogger();
+		/*Logger rootLogger = Logger.getRootLogger();
 		
 		FileAppender fileAppender = null;
 		@SuppressWarnings("rawtypes")
@@ -540,7 +540,7 @@ public class OpenmrsUtil {
 		}
 		catch (IOException e) {
 			log.error("Error while setting an OpenMRS log file to " + logLocation, e);
-		}
+		}*/
 	}
 	
 	/**
@@ -559,7 +559,7 @@ public class OpenmrsUtil {
 				logClass = OpenmrsConstants.LOG_CLASS_DEFAULT;
 			}
 			
-			Logger logger = Logger.getLogger(logClass);
+			/*Logger logger = Logger.getLogger(logClass);
 			
 			logLevel = logLevel.toLowerCase();
 			if (OpenmrsConstants.LOG_LEVEL_TRACE.equals(logLevel)) {
@@ -577,7 +577,7 @@ public class OpenmrsUtil {
 			} else {
 				log.warn("Global property " + logLevel + " is invalid. "
 				        + "Valid values are trace, debug, info, warn, error or fatal");
-			}
+			}*/
 		}
 	}
 	

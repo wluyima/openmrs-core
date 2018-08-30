@@ -33,9 +33,9 @@ import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.log4j.Level;
+/*import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;*/
 import org.openmrs.api.context.Context;
 import org.openmrs.module.MandatoryModuleException;
 import org.openmrs.module.Module;
@@ -168,10 +168,10 @@ public final class Listener extends ContextLoader implements ServletContextListe
 				
 				//ensure that we always log the runtime properties file that we are using
 				//since openmrs is just booting, the log levels are not yet set. TRUNK-4835
-				Logger contextLog = Logger.getLogger(getClass());
-				contextLog.setLevel(Level.INFO);
-				contextLog.info("Using runtime properties file: "
-				        + OpenmrsUtil.getRuntimePropertiesFilePathName(WebConstants.WEBAPP_NAME));
+				//Logger contextLog = Logger.getLogger(getClass());
+				//contextLog.setLevel(Level.INFO);
+				//contextLog.info("Using runtime properties file: "
+				//        + OpenmrsUtil.getRuntimePropertiesFilePathName(WebConstants.WEBAPP_NAME));
 			}
 			
 			Thread.currentThread().setContextClassLoader(OpenmrsClassLoader.getInstance());
@@ -582,7 +582,7 @@ public final class Listener extends ContextLoader implements ServletContextListe
 		
 		OpenmrsClassLoader.onShutdown();
 		
-		LogManager.shutdown();
+		//LogManager.shutdown();
 		
 		// just to make things nice and clean.
 		// Suppressing sonar issue squid:S1215

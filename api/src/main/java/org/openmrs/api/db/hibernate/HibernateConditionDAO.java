@@ -11,14 +11,14 @@ package org.openmrs.api.db.hibernate;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.openmrs.Condition;
 import org.openmrs.Patient;
 import org.openmrs.api.db.ConditionDAO;
 import org.openmrs.api.db.DAOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hibernate implementation of the ConditionDAO
@@ -27,7 +27,7 @@ import org.openmrs.api.db.DAOException;
  */
 public class HibernateConditionDAO implements ConditionDAO {
 	
-	private static final Log log = LogFactory.getLog(HibernateConditionDAO.class);
+	private static final Logger log = LoggerFactory.getLogger(HibernateConditionDAO.class);
 	
 	/**
 	 * Hibernate session factory

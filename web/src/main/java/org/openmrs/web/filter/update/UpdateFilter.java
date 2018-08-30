@@ -33,8 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Appender;
-import org.apache.log4j.Logger;
+/*import org.apache.log4j.Appender;
+import org.apache.log4j.Logger;*/
 import org.openmrs.util.DatabaseUpdateException;
 import org.openmrs.util.DatabaseUpdater;
 import org.openmrs.util.DatabaseUpdater.ChangeSetExecutorCallback;
@@ -272,7 +272,7 @@ public class UpdateFilter extends StartupFilter {
 				result.put("message", updateJob.getMessage());
 				result.put("changesetIds", updateJob.getChangesetIds());
 				result.put("executingChangesetId", updateJob.getExecutingChangesetId());
-				Appender appender = Logger.getRootLogger().getAppender("MEMORY_APPENDER");
+				/*Appender appender = Logger.getRootLogger().getAppender("MEMORY_APPENDER");
 				if (appender instanceof MemoryAppender) {
 					MemoryAppender memoryAppender = (MemoryAppender) appender;
 					List<String> logLines = memoryAppender.getLogLines();
@@ -283,7 +283,7 @@ public class UpdateFilter extends StartupFilter {
 					result.put("logLines", logLines);
 				} else {
 					result.put("logLines", new ArrayList<String>());
-				}
+				}*/
 			}
 			
 			String jsonText = toJSONString(result);

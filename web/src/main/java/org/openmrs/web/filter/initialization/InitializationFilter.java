@@ -43,8 +43,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Appender;
-import org.apache.log4j.Logger;
+/*import org.apache.log4j.Appender;
+import org.apache.log4j.Logger;*/
 import org.openmrs.ImplementationId;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.PasswordException;
@@ -237,7 +237,7 @@ public class InitializationFilter extends StartupFilter {
 					result.put("completedPercentage", initJob.getCompletedPercentage());
 				}
 				
-				Appender appender = Logger.getRootLogger().getAppender("MEMORY_APPENDER");
+				/*Appender appender = Logger.getRootLogger().getAppender("MEMORY_APPENDER");
 				if (appender instanceof MemoryAppender) {
 					MemoryAppender memoryAppender = (MemoryAppender) appender;
 					List<String> logLines = memoryAppender.getLogLines();
@@ -248,7 +248,7 @@ public class InitializationFilter extends StartupFilter {
 					result.put("logLines", logLines);
 				} else {
 					result.put("logLines", new ArrayList<String>());
-				}
+				}*/
 			}
 			
 			PrintWriter writer = httpResponse.getWriter();
