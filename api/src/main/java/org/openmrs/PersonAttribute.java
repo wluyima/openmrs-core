@@ -21,10 +21,12 @@ import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Fields;
+import org.hibernate.search.annotations.FullTextFilterDef;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.search.LuceneAnalyzers;
+import org.openmrs.api.db.hibernate.ExcludePersonsByLocationFilter;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
@@ -42,6 +44,7 @@ import org.slf4j.LoggerFactory;
  * @see org.openmrs.Attributable
  */
 @Indexed
+@FullTextFilterDef(name="person-filterByLocation", impl = ExcludePersonsByLocationFilter.class)
 public class PersonAttribute extends BaseChangeableOpenmrsData implements java.io.Serializable, Comparable<PersonAttribute> {
 	
 	public static final long serialVersionUID = 11231211232111L;

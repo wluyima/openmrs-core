@@ -432,6 +432,8 @@ public abstract class LuceneQuery<T> extends SearchQuery<T> {
 		fullTextQuery.enableFullTextFilter("termsFilterFactory").setParameter("includeTerms", includeTerms)
 				.setParameter("excludeTerms", excludeTerms);
 
+		fullTextQuery.enableFullTextFilter("person-filterByLocation");
+		
 		fullTextQuery.setFilter(termsFilter);
 
 		adjustFullTextQuery(fullTextQuery);

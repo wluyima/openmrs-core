@@ -23,6 +23,7 @@ import static org.openmrs.test.TestUtil.assertCollectionContentsEquals;
 import static org.openmrs.util.AddressMatcher.containsAddress;
 import static org.openmrs.util.NameMatcher.containsFullName;
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.SessionFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -64,6 +65,7 @@ import org.openmrs.test.SkipBaseSetup;
 import org.openmrs.test.TestUtil;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,6 +118,9 @@ public class PatientServiceTest extends BaseContextSensitiveTest {
 	protected static AdministrationService adminService = null;
 	
 	protected static LocationService locationService = null;
+	
+	@Autowired
+	SessionFactory sf;
 	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
@@ -3257,6 +3262,12 @@ public class PatientServiceTest extends BaseContextSensitiveTest {
 		assertEquals(8, encounterService.getEncounter(57).getAllObs(true).size());
 		assertEquals(1, encounterService.getEncounter(57).getObsAtTopLevel(false).size());
 		assertEquals(2, encounterService.getEncounter(57).getObsAtTopLevel(true).size());
+	}
+	
+	@Test
+	public void getPatients_shouldExcludePatientsThatDonotMatchTheLocationFilter(){
+		updateSearchIndex();
+		assertEquals(1, patientService.getPatients("Hor").size());
 	}
 
 }

@@ -14,7 +14,11 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="org.openmrs">
-
+	<!--
+	<filter-def name="person-filterByLocation" condition="deaded = false">
+		<filter-param name="locationId" type="int"/>
+	</filter-def>
+     -->
 	<class name="Person" table="person">
 
         <cache usage="read-write"/>
@@ -103,6 +107,8 @@
 	    <property name="patient" type="boolean" insert="false" update="false" lazy="true">
 	    	<formula>case when exists (select * from patient p where p.patient_id = person_id) then 1 else 0 end</formula> 
 	    </property>
+
+		<!--<filter name="person-filterByLocation" />-->
 	    		
 	</class>
 </hibernate-mapping>
