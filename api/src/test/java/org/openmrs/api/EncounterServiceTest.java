@@ -9,6 +9,7 @@
  */
 package org.openmrs.api;
 
+import org.hibernate.SessionFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -47,6 +48,7 @@ import org.openmrs.test.BaseContextSensitiveTest;
 import org.openmrs.util.DateUtil;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.PrivilegeConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
 import java.text.DateFormat;
@@ -85,6 +87,11 @@ public class EncounterServiceTest extends BaseContextSensitiveTest {
 
 	protected static final String ORDER_SET = "org/openmrs/api/include/OrderSetServiceTest-general.xml";
 
+	@Autowired
+	private SessionFactory sf;
+
+	@Autowired
+	private EncounterService encounterService;
 
 	/**
 	 * This method is run before all of the tests in this class because it has the @Before
@@ -3014,4 +3021,17 @@ public class EncounterServiceTest extends BaseContextSensitiveTest {
 		
 		assertEquals("Two New Order Groups Get Saved", 2, orderGroups.size());
 	}
+
+	@Test
+	public void getEncounters_shouldProveThatDataReferencingFilteredOutEntitiesRemainsVisible() {
+		Patient p = new Patient(7);
+		List<Encounter> encounters = encounterService.getEncountersByPatient(p);
+		int initialCount = encounters.size();
+		assertTrue(initialCount > 1);
+		final String locationUuid = encounters.get(0).getLocation().getUuid();
+		sf.getCurrentSession().enableFilter("locationFilterByUuid").setParameter("uuid", locationUuid);
+		assertNull(Context.getLocationService().getLocationByUuid(locationUuid));
+		assertEquals(initialCount, encounterService.getEncountersByPatient(p).size());
+	}
+	
 }

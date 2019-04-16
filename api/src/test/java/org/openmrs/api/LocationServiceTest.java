@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.SessionFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +35,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.test.BaseContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Tests all methods in the {@link LocationService}
@@ -43,6 +45,12 @@ public class LocationServiceTest extends BaseContextSensitiveTest {
 	protected static final String LOC_INITIAL_DATA_XML = "org/openmrs/api/include/LocationServiceTest-initialData.xml";
 	
 	protected static final String LOC_ATTRIBUTE_DATA_XML = "org/openmrs/api/include/LocationServiceTest-attributes.xml";
+	
+	@Autowired
+	private LocationService locationService;
+	
+	@Autowired
+	private SessionFactory sf;
 	
 	/**
 	 * Run this before each unit test in this class. This adds a bit more data to the base data that
@@ -1186,6 +1194,21 @@ public class LocationServiceTest extends BaseContextSensitiveTest {
 		location.addTag(tag);
 		locationService.retireLocation(location, "test retire reason");
 		Assert.assertFalse(tag.getRetired());
+	}
+	
+	@Test
+	public void getLocations_shouldFilterOutLocationsByUuid() {
+		final String phrase = "test";
+		List<Location> locations = locationService.getLocations(phrase);
+		int initialSize = locations.size();
+		assertTrue(initialSize > 1);
+		int initialCount = locationService.getCountOfLocations(phrase, false);
+		assertTrue(initialCount > 1);
+		
+		sf.getCurrentSession().enableFilter("locationFilterByUuid").setParameter("uuid", locations.get(0).getUuid());
+		assertEquals(--initialSize, locationService.getLocations(phrase).size());
+		//Should apply filter when aggregate functions are included
+		assertEquals(--initialCount, locationService.getCountOfLocations(phrase, false).intValue());
 	}
 	
 }

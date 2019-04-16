@@ -133,5 +133,12 @@
             <one-to-many class="LocationAttribute" />
         </set>
 
+		<filter name="locationFilterByUuid" condition="uuid != :uuid" />
+
     </class>
+
+	<filter-def name="locationFilterByUuid">
+		<filter-param name="uuid" type="string" />
+	</filter-def>
+	
 </hibernate-mapping>
