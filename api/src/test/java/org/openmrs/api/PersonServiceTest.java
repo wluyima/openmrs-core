@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.hibernate.SessionFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,6 +54,7 @@ import org.openmrs.person.PersonMergeLogData;
 import org.openmrs.test.BaseContextSensitiveTest;
 import org.openmrs.test.TestUtil;
 import org.openmrs.util.OpenmrsConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class tests methods in the PersonService class. TODO: Test all methods in the PersonService
@@ -77,6 +79,9 @@ public class PersonServiceTest extends BaseContextSensitiveTest {
 	protected AdministrationService adminService = null;
 	
 	protected PersonService personService = null;
+	
+	@Autowired
+	private SessionFactory sf;
 	
 	@Before
 	public void onSetUpInTransaction() {
@@ -2348,4 +2353,15 @@ public class PersonServiceTest extends BaseContextSensitiveTest {
 		assertThat(result, contains(birthplace));
 		assertEquals(result.size(), 1);
 	}
+
+	@Test
+	public void getPatient_shouldFilterOutThePersonsByUuid() {
+		Person p = personService.getPersonByUuid("da7f524f-27ce-4bb2-86d6-6d1d05312bd5");
+		assertNotNull(p);
+		sf.getCurrentSession().enableFilter("personFilterByUuid").setParameter("uuid", p.getUuid());
+		//Filter won't work for a direct lookup by id
+		assertNotNull(personService.getPerson(p.getId()));
+		assertNull(personService.getPersonByUuid(p.getUuid()));
+	}
+	
 }
