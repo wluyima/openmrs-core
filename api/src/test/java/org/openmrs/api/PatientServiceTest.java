@@ -3270,4 +3270,34 @@ public class PatientServiceTest extends BaseContextSensitiveTest {
 		assertEquals(1, patientService.getPatients("Hor").size());
 	}
 
+	@Test
+	public void getPatients_shouldProveThatFilterDoesNotWorkForFetchQueries() {
+		Patient p = patientService.getPatientByUuid("da7f524f-27ce-4bb2-86d6-6d1d05312bd5");
+		assertNotNull(p);
+		sf.getCurrentSession().enableFilter("personFilterByUuid").setParameter("uuid", p.getUuid());
+		//Filter won't work for a direct lookup by id
+		assertNotNull(patientService.getPatient(p.getId()));
+		assertNull(patientService.getPatientByUuid(p.getUuid()));
+	}
+
+	@Test
+	public void getPatients_shouldExcludePatientsThatMatchTheUuidFilter() {
+		List<Patient> patients = patientService.getAllPatients();
+		final int initialSize = patients.size();
+		assertTrue(initialSize > 0);
+		sf.getCurrentSession().enableFilter("personFilterByUuid").setParameter("uuid", patients.get(0).getUuid());
+		assertEquals(initialSize - 1, patientService.getAllPatients().size());
+	}
+
+	@Test
+	public void getPatients_shouldExcludePatientsOfTheSpecifiedGender() {
+		updateSearchIndex();
+		List<Patient> persons = patientService.getAllPatients();
+		final int initialSize = persons.size();
+		assertTrue(initialSize > 0);
+		assertEquals("M", persons.get(0).getGender());
+		sf.getCurrentSession().enableFilter("personFilterByGender").setParameter("gender", "M");
+		assertEquals(initialSize - 2, patientService.getAllPatients().size());
+	}
+
 }

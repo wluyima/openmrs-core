@@ -24,6 +24,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FullTextFilterDef;
+import org.hibernate.search.annotations.Indexed;
+import org.openmrs.api.db.hibernate.ExcludePersonsByGenderFilter;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +40,8 @@ import org.springframework.util.StringUtils;
  * 
  * @see org.openmrs.Patient
  */
+@Indexed
+@FullTextFilterDef(name = "personFilterByGender", impl = ExcludePersonsByGenderFilter.class)
 public class Person extends BaseChangeableOpenmrsData {
 	
 	public static final long serialVersionUID = 2L;

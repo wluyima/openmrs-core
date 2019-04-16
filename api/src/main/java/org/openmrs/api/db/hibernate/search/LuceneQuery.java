@@ -24,6 +24,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
+import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
@@ -432,7 +433,12 @@ public abstract class LuceneQuery<T> extends SearchQuery<T> {
 		fullTextQuery.enableFullTextFilter("termsFilterFactory").setParameter("includeTerms", includeTerms)
 				.setParameter("excludeTerms", excludeTerms);
 
-		fullTextQuery.enableFullTextFilter("person-filterByLocation");
+		Session session = getFullTextSession().getSessionFactory().getCurrentSession();
+		Filter genderFilter = session.getEnabledFilter("personFilterByGender");
+		if(genderFilter != null) {
+			//TODO In theory, we fetch the gender to filter on from the same place as the standard filter
+			fullTextQuery.enableFullTextFilter(genderFilter.getName()).setParameter("gender", "F");
+		}
 		
 		fullTextQuery.setFilter(termsFilter);
 
