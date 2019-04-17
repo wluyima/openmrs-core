@@ -16,6 +16,8 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,8 +25,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SqlFragmentAlias;
+import org.hibernate.type.StringType;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Location;
@@ -46,11 +54,111 @@ public class LocationServiceTest extends BaseContextSensitiveTest {
 	
 	protected static final String LOC_ATTRIBUTE_DATA_XML = "org/openmrs/api/include/LocationServiceTest-attributes.xml";
 	
+	private static final String FILTER_NAME = "tagFilterByName";
+	
+	private static final String PARAM_NAME = "uuid";
+	
 	@Autowired
 	private LocationService locationService;
 	
 	@Autowired
 	private SessionFactory sf;
+	
+	@BeforeClass
+	public static void beforeClass() throws Exception {
+		//Typically, a module should register these early in its lifecycle before the  
+		//application context is refreshed probably in ModuleActivator#willStart() 
+		//and then good to remove them in ModuleActivator#willStop() 
+		addAnnotationToClass(LocationTag.class, createFilterDefAnnotation());
+		addAnnotationToClass(LocationTag.class, createFilterAnnotation());
+	}
+	
+	private static void addAnnotationToClass(Class clazz, Annotation annotation) throws Exception {
+		Method method = Class.class.getDeclaredMethod("getDeclaredAnnotationMap");
+		method.setAccessible(true);
+		Map<Class<? extends Annotation>, Annotation> map = (Map<Class<? extends Annotation>, Annotation>) method
+		        .invoke(clazz);
+		map.put(annotation.annotationType(), annotation);
+	}
+	
+	private static FilterDef createFilterDefAnnotation() {
+		
+		return new FilterDef() {
+			
+			@Override
+			public String name() {
+				return FILTER_NAME;
+			}
+			
+			@Override
+			public String defaultCondition() {
+				return "";
+			}
+			
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return FilterDef.class;
+			}
+			
+			@Override
+			public ParamDef[] parameters() {
+				
+				ParamDef paramDef = new ParamDef() {
+					
+					@Override
+					public String name() {
+						return PARAM_NAME;
+					}
+					
+					@Override
+					public String type() {
+						return StringType.INSTANCE.getName();
+					}
+					
+					@Override
+					public Class<? extends Annotation> annotationType() {
+						return ParamDef.class;
+					}
+					
+				};
+				
+				return new ParamDef[] { paramDef };
+			}
+			
+		};
+	}
+	
+	private static Filter createFilterAnnotation() {
+		
+		return new Filter() {
+			
+			@Override
+			public String name() {
+				return FILTER_NAME;
+			}
+			
+			@Override
+			public String condition() {
+				return "uuid = :uuid";
+			}
+			
+			@Override
+			public boolean deduceAliasInjectionPoints() {
+				return true;
+			}
+			
+			@Override
+			public SqlFragmentAlias[] aliases() {
+				return new SqlFragmentAlias[] {};
+			}
+			
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return Filter.class;
+			}
+			
+		};
+	}
 	
 	/**
 	 * Run this before each unit test in this class. This adds a bit more data to the base data that
@@ -1209,6 +1317,18 @@ public class LocationServiceTest extends BaseContextSensitiveTest {
 		assertEquals(--initialSize, locationService.getLocations(phrase).size());
 		//Should apply filter when aggregate functions are included
 		assertEquals(--initialCount, locationService.getCountOfLocations(phrase, false).intValue());
+	}
+	
+	@Test
+	public void getLocations_shouldFilterOutLocationTagsByName() {
+		executeDataSet(LOC_INITIAL_DATA_XML);
+		final String phrase = "G";
+		List<LocationTag> locationTags = locationService.getLocationTags(phrase);
+		int initialSize = locationTags.size();
+		assertTrue(initialSize > 1);
+		
+		sf.getCurrentSession().enableFilter(FILTER_NAME).setParameter(PARAM_NAME, locationTags.get(0).getUuid());
+		assertEquals(--initialSize, locationService.getLocationTags(phrase).size());
 	}
 	
 }
