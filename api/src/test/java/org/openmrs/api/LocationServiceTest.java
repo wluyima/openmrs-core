@@ -56,7 +56,7 @@ public class LocationServiceTest extends BaseContextSensitiveTest {
 	
 	private static final String FILTER_NAME = "tagFilterByName";
 	
-	private static final String PARAM_NAME = "uuid";
+	private static final String PARAM_NAME = "name";
 	
 	@Autowired
 	private LocationService locationService;
@@ -139,7 +139,7 @@ public class LocationServiceTest extends BaseContextSensitiveTest {
 			
 			@Override
 			public String condition() {
-				return "uuid = :uuid";
+				return PARAM_NAME + " != :" + PARAM_NAME;
 			}
 			
 			@Override
@@ -1309,9 +1309,9 @@ public class LocationServiceTest extends BaseContextSensitiveTest {
 		final String phrase = "test";
 		List<Location> locations = locationService.getLocations(phrase);
 		int initialSize = locations.size();
-		assertTrue(initialSize > 1);
+		assertTrue(initialSize > 2);
 		int initialCount = locationService.getCountOfLocations(phrase, false);
-		assertTrue(initialCount > 1);
+		assertTrue(initialCount > 2);
 		
 		sf.getCurrentSession().enableFilter("locationFilterByUuid").setParameter("uuid", locations.get(0).getUuid());
 		assertEquals(--initialSize, locationService.getLocations(phrase).size());
@@ -1320,15 +1320,15 @@ public class LocationServiceTest extends BaseContextSensitiveTest {
 	}
 	
 	@Test
-	public void getLocations_shouldFilterOutLocationTagsByName() {
+	public void getLocations_shouldFilterOutLocationTagsByNameThatHasBeenDynamicallyAdded() {
 		executeDataSet(LOC_INITIAL_DATA_XML);
 		final String phrase = "G";
-		List<LocationTag> locationTags = locationService.getLocationTags(phrase);
+		List<LocationTag> locationTags = locationService.getAllLocationTags();
 		int initialSize = locationTags.size();
-		assertTrue(initialSize > 1);
+		assertTrue(initialSize > 2);
 		
-		sf.getCurrentSession().enableFilter(FILTER_NAME).setParameter(PARAM_NAME, locationTags.get(0).getUuid());
-		assertEquals(--initialSize, locationService.getLocationTags(phrase).size());
+		sf.getCurrentSession().enableFilter(FILTER_NAME).setParameter(PARAM_NAME, locationTags.get(0).getName());
+		assertEquals(--initialSize, locationService.getAllLocationTags().size());
 	}
 	
 }
