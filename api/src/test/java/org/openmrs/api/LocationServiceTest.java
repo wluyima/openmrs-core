@@ -1322,7 +1322,6 @@ public class LocationServiceTest extends BaseContextSensitiveTest {
 	@Test
 	public void getLocations_shouldFilterOutLocationTagsByNameThatHasBeenDynamicallyAdded() {
 		executeDataSet(LOC_INITIAL_DATA_XML);
-		final String phrase = "G";
 		List<LocationTag> locationTags = locationService.getAllLocationTags();
 		int initialSize = locationTags.size();
 		assertTrue(initialSize > 2);
