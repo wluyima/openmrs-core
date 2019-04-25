@@ -286,12 +286,12 @@
   <person_name person_name_id="9349" preferred="false" person_id="501" given_name="Bruno" middle_name="" family_name="Otterbourg" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="d7e51684-a077-4039-9d85-8fd599609156"/>
   <person_name person_name_id="9350" preferred="false" person_id="502" given_name="Hippocrates" middle_name="" family_name="of Cos" creator="1" date_created="2008-08-15 15:57:09.0" voided="false" uuid="0e69f78c-e3f2-4d9c-933b-d52aa8a669b8"/>
   <person_name person_name_id="9351" preferred="true" person_id="6" given_name="Johnny" middle_name="Test" family_name="Doe" creator="1" date_created="2008-08-18 11:44:02.0" voided="false" void_reason="" uuid="c8fb44f1-b54c-4741-a485-1d435ec8e28f"/>
-  <patient patient_id="2" creator="1" date_created="2005-09-22 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:29:59.0" voided="false" void_reason=""/>
-  <patient patient_id="6" creator="1" date_created="2006-01-18 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:25:31.0" voided="false" void_reason=",,,,"/>
-  <patient patient_id="7" creator="1" date_created="2006-01-18 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:25:57.0" voided="false" void_reason=""/>
-  <patient patient_id="8" creator="1" date_created="2006-01-18 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:24:34.0" voided="false" void_reason=""/>
-  <patient patient_id="999" creator="1" date_created="2006-01-18 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:24:34.0" voided="true" void_reason="For test purposes"/>
-  <patient patient_id="432" creator="1" date_created="2006-01-18 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:24:34.0" voided="true" void_reason="For test purposes"/>
+  <patient patient_id="2" creator="1" date_created="2005-09-22 00:00:00.0" voided="false" void_reason=""/>
+  <patient patient_id="6" creator="1" date_created="2006-01-18 00:00:00.0" voided="false" void_reason=",,,,"/>
+  <patient patient_id="7" creator="1" date_created="2006-01-18 00:00:00.0" voided="false" void_reason=""/>
+  <patient patient_id="8" creator="1" date_created="2006-01-18 00:00:00.0" voided="false" void_reason=""/>
+  <patient patient_id="999" creator="1" date_created="2006-01-18 00:00:00.0" voided="true" void_reason="For test purposes"/>
+  <patient patient_id="432" creator="1" date_created="2006-01-18 00:00:00.0" voided="true" void_reason="For test purposes"/>
   <patient_identifier_type patient_identifier_type_id="1" name="OpenMRS Identification Number" description="Unique number used in OpenMRS" format="" creator="1" date_created="2005-09-22 00:00:00.0" required="false" validator="org.openmrs.patient.impl.LuhnIdentifierValidator" retired="false" uuid="1a339fe9-38bc-4ab3-b180-320988c0b968"/>
   <patient_identifier_type patient_identifier_type_id="2" name="Old Identification Number" description="Number given out prior to the OpenMRS system (No check digit)" format="" creator="1" date_created="2005-09-22 00:00:00.0" required="false" retired="false" uuid="2f470aa8-1d73-43b7-81b5-01f0c0dfa53c"/>
   <patient_identifier_type patient_identifier_type_id="4" name="Social Security Number" description="Soc security ID" format="" creator="1" date_created="2008-08-15 15:59:20.0" required="false" format_description="" validator="" retired="true" retired_by="1" date_retired="2008-08-15 00:00:00.0" retire_reason="test" uuid="158d6b17-a8ab-435b-8fe3-952a04bda757"/>

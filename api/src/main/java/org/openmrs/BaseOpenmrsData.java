@@ -31,7 +31,7 @@ import org.hibernate.search.annotations.Field;
 public abstract class BaseOpenmrsData extends BaseOpenmrsObject implements OpenmrsData {
 	
 	//***** Properties *****
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	@JoinColumn(name = "creator", updatable = false)
 	protected User creator;
 	
