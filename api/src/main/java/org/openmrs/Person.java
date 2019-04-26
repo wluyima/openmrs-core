@@ -129,30 +129,29 @@ public class Person extends BaseChangeableOpenmrsData {
 	@Column(name="cause_of_death_non_coded")
 	private String causeOfDeathNonCoded;
 
-	//@ManyToOne
-	//@JoinColumn(name="creator", updatable = false, insertable = false)
-	//private User personCreator;
+	@Transient
+	private User personCreator;
 
-	//private Date personDateCreated;
+	@Transient
+	private Date personDateCreated;
 
-	//@ManyToOne
-	//@JoinColumn(name="changed_by", updatable = false, insertable = false)
-	//private User personChangedBy;
-	
-	//private Date personDateChanged;
+	@Transient
+	private User personChangedBy;
 
-	//@Column(name="voided", updatable = false, insertable = false)
-	//private Boolean personVoided = false;
+	@Transient
+	private Date personDateChanged;
 
-	//@ManyToOne
-	//@JoinColumn(name="voided_by", updatable = false, insertable = false)
-	//private User personVoidedBy;
+	@Transient
+	private Boolean personVoided = false;
 
-	//@Column(name="date_voided", updatable = false, insertable = false)
-	//private Date personDateVoided;
+	@Transient
+	private User personVoidedBy;
 
-	//@Column(name="void_reason")//, updatable = false, insertable = false)
-	//private String personVoidReason;
+	@Transient
+	private Date personDateVoided;
+
+	@Transient
+	private String personVoidReason;
 
 	@Field
 	@Formula("case when exists (select * from patient p where p.patient_id = person_id) then 1 else 0 end")
@@ -1028,51 +1027,63 @@ public class Person extends BaseChangeableOpenmrsData {
 	}
 	
 	public User getPersonChangedBy() {
-		return super.getChangedBy();
+		personChangedBy = getChangedBy();
+		return personChangedBy;
 	}
 	
 	public void setPersonChangedBy(User changedBy) {
-		super.setChangedBy(changedBy);
+		this.personChangedBy = changedBy;
+		this.setChangedBy(changedBy);
 	}
 	
 	public Date getPersonDateChanged() {
-		return super.getDateChanged();
+		personDateChanged = getDateChanged();
+		return personDateChanged;
 	}
 	
 	public void setPersonDateChanged(Date dateChanged) {
-		super.setDateChanged(dateChanged);
+		this.personDateChanged = dateChanged;
+		this.setDateChanged(dateChanged);
 	}
 	
 	public User getPersonCreator() {
-		return super.getCreator();
+		personCreator = getCreator();
+		return personCreator;
 	}
 	
 	public void setPersonCreator(User creator) {
-		super.setCreator(creator);
+		this.personCreator = creator;
+		this.setCreator(creator);
 	}
 	
 	public Date getPersonDateCreated() {
-		return super.getDateCreated();
+		personDateCreated = getDateCreated();
+		return personDateCreated;
 	}
 	
 	public void setPersonDateCreated(Date dateCreated) {
-		super.setDateCreated(dateCreated);
+		this.personDateCreated = dateCreated;
+		this.setDateCreated(dateCreated);
 	}
 	
 	public Date getPersonDateVoided() {
-		return super.getDateVoided();
+		personDateVoided = getDateVoided();
+		return personDateVoided;
 	}
 	
 	public void setPersonDateVoided(Date dateVoided) {
-		super.setDateVoided(dateVoided);
+		this.personDateVoided = dateVoided;
+		this.setDateVoided(dateVoided);
 	}
 	
 	public void setPersonVoided(Boolean voided) {
-		super.setVoided(voided);
+		this.personVoided = voided;
+		this.setVoided(voided);
 	}
 	
 	public Boolean getPersonVoided() {
-		return super.getVoided();
+		personVoided = getVoided();
+		return personVoided;
 	}
 	
 	/**
@@ -1081,23 +1092,27 @@ public class Person extends BaseChangeableOpenmrsData {
 	@Deprecated
 	@JsonIgnore
 	public Boolean isPersonVoided() {
-		return super.isVoided();
+		return getPersonVoided();
 	}
 	
 	public User getPersonVoidedBy() {
-		return super.getVoidedBy();
+		personVoidedBy = getVoidedBy();
+		return personVoidedBy;
 	}
 	
 	public void setPersonVoidedBy(User voidedBy) {
-		super.setVoidedBy(voidedBy);
+		this.personVoidedBy = voidedBy;
+		this.setVoidedBy(voidedBy);
 	}
 	
 	public String getPersonVoidReason() {
-		return super.getVoidReason();
+		personVoidReason = getVoidReason();
+		return personVoidReason;
 	}
 	
 	public void setPersonVoidReason(String voidReason) {
-		super.setVoidReason(voidReason);
+		this.personVoidReason = voidReason;
+		this.setVoidReason(voidReason);
 	}
 	
 	/**

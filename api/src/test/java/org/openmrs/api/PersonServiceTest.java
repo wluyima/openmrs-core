@@ -1653,18 +1653,25 @@ public class PersonServiceTest extends BaseContextSensitiveTest {
 	public void voidPerson_shouldReturnVoidedPersonWithGivenReason() throws Exception {
 		executeDataSet("org/openmrs/api/include/PersonServiceTest-createPersonPurgeVoidTest.xml");
 		Person person = Context.getPersonService().getPerson(1001);
-		Context.getPersonService().voidPerson(person, "Test Voiding Person");
+		final String reason = "Test Voiding Person";
+		Context.getPersonService().voidPerson(person, reason);
 		
 		Context.flushSession();
 		Context.clearSession();
-		
+
 		Person voidedPerson = Context.getPersonService().getPerson(1001);
 		
 		assertTrue(voidedPerson.getVoided());
 		Assert.assertNotNull(voidedPerson.getVoidedBy());
+		Assert.assertNotNull(voidedPerson.getVoidReason());
+		Assert.assertNotNull(voidedPerson.getDateVoided());
+		Assert.assertEquals(voidedPerson.getVoidReason(), reason);
+
+		assertTrue(voidedPerson.getPersonVoided());
+		Assert.assertNotNull(voidedPerson.getPersonVoidedBy());
 		Assert.assertNotNull(voidedPerson.getPersonVoidReason());
 		Assert.assertNotNull(voidedPerson.getPersonDateVoided());
-		Assert.assertEquals(voidedPerson.getPersonVoidReason(), "Test Voiding Person");
+		Assert.assertEquals(voidedPerson.getPersonVoidReason(), reason);
 	}
 
 	@Test
