@@ -90,7 +90,7 @@ public class HibernatePersonDAO implements PersonDAO {
 		String[] names = name.split(" ");
 		
 		StringBuilder q = new StringBuilder(
-		        "select p from Person p left join p.names as pname where p.personVoided = false and pname.voided = false and ");
+		        "select p from Person p left join p.names as pname where p.voided = false and pname.voided = false and ");
 		
 		if (names.length == 1) {
 			q.append("(").append(" soundex(pname.givenName) = soundex(:n1)").append(
@@ -248,7 +248,7 @@ public class HibernatePersonDAO implements PersonDAO {
 			}
 
 			if (!includeVoided) {
-				criteria.add(Restrictions.eq("personVoided", false));
+				criteria.add(Restrictions.eq("voided", false));
 			}
 
 			criteria.setMaxResults(maxResults);

@@ -20,11 +20,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.AttributeOverride;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,11 +33,18 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.SortNatural;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
@@ -72,7 +79,11 @@ public class Person extends BaseChangeableOpenmrsData {
 	@OneToMany(mappedBy = "person")
 	private Set<PersonAddress> addresses = null;
 
-	@OneToMany(mappedBy = "person")
+	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@SortNatural
+	@OrderBy("voided asc, preferred desc, date_created desc")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@BatchSize(size = 1000)
 	@ContainedIn
 	private Set<PersonName> names = null;
 
@@ -81,10 +92,14 @@ public class Person extends BaseChangeableOpenmrsData {
 	private Set<PersonAttribute> attributes = null;
 
 	@Field
+	@Column(length = 50)
 	private String gender;
 
+	@Column(name="birthdate", length = 10)
 	private Date birthdate;
 
+	@Basic
+	@Temporal(TemporalType.TIME)
 	private Date birthtime;
 
 	@Column(name="birthdate_estimated")
@@ -94,35 +109,43 @@ public class Person extends BaseChangeableOpenmrsData {
 	private Boolean deathdateEstimated = false;
 
 	@Field
+	@Basic
 	private Boolean dead = false;
-	
+
+	@Column(name="death_date")
 	private Date deathDate;
 	
 	@ManyToOne
 	@JoinColumn(name="cause_of_death")
 	private Concept causeOfDeath;
-	
+
+	@Column(name="cause_of_death_non_coded")
 	private String causeOfDeathNonCoded;
 
-	@ManyToOne
-	@JoinColumn(name="creator", updatable = false, insertable = false)
-	private User personCreator;
+	//@ManyToOne
+	//@JoinColumn(name="creator", updatable = false, insertable = false)
+	//private User personCreator;
 
-	private Date personDateCreated;
+	//private Date personDateCreated;
 
-	@ManyToOne
-	@JoinColumn(name="changed_by", updatable = false, insertable = false)
-	private User personChangedBy;
+	//@ManyToOne
+	//@JoinColumn(name="changed_by", updatable = false, insertable = false)
+	//private User personChangedBy;
 	
-	private Date personDateChanged;
+	//private Date personDateChanged;
 
-	private Boolean personVoided = false;
-	
-	private User personVoidedBy;
-	
-	private Date personDateVoided;
-	
-	private String personVoidReason;
+	//@Column(name="voided", updatable = false, insertable = false)
+	//private Boolean personVoided = false;
+
+	//@ManyToOne
+	//@JoinColumn(name="voided_by", updatable = false, insertable = false)
+	//private User personVoidedBy;
+
+	//@Column(name="date_voided", updatable = false, insertable = false)
+	//private Date personDateVoided;
+
+	//@Column(name="void_reason")//, updatable = false, insertable = false)
+	//private String personVoidReason;
 
 	@Field
 	@Formula("case when exists (select * from patient p where p.patient_id = person_id) then 1 else 0 end")
@@ -998,60 +1021,51 @@ public class Person extends BaseChangeableOpenmrsData {
 	}
 	
 	public User getPersonChangedBy() {
-		return personChangedBy;
+		return super.getChangedBy();
 	}
 	
 	public void setPersonChangedBy(User changedBy) {
-		this.personChangedBy = changedBy;
-		this.setChangedBy(changedBy);
+		super.setChangedBy(changedBy);
 	}
 	
 	public Date getPersonDateChanged() {
-		return personDateChanged;
+		return super.getDateChanged();
 	}
 	
 	public void setPersonDateChanged(Date dateChanged) {
-		this.personDateChanged = dateChanged;
-		this.setDateChanged(dateChanged);
+		super.setDateChanged(dateChanged);
 	}
 	
 	public User getPersonCreator() {
-		if(personCreator == null){
-			personCreator = getCreator();
-		}
-		return personCreator;
+		return super.getCreator();
 	}
 	
 	public void setPersonCreator(User creator) {
-		this.personCreator = creator;
-		this.setCreator(creator);
+		super.setCreator(creator);
 	}
 	
 	public Date getPersonDateCreated() {
-		return personDateCreated;
+		return super.getDateCreated();
 	}
 	
 	public void setPersonDateCreated(Date dateCreated) {
-		this.personDateCreated = dateCreated;
-		this.setDateCreated(dateCreated);
+		super.setDateCreated(dateCreated);
 	}
 	
 	public Date getPersonDateVoided() {
-		return personDateVoided;
+		return super.getDateVoided();
 	}
 	
 	public void setPersonDateVoided(Date dateVoided) {
-		this.personDateVoided = dateVoided;
-		this.setDateVoided(dateVoided);
+		super.setDateVoided(dateVoided);
 	}
 	
 	public void setPersonVoided(Boolean voided) {
-		this.personVoided = voided;
-		this.setVoided(voided);
+		super.setVoided(voided);
 	}
 	
 	public Boolean getPersonVoided() {
-		return personVoided;
+		return super.getVoided();
 	}
 	
 	/**
@@ -1060,25 +1074,23 @@ public class Person extends BaseChangeableOpenmrsData {
 	@Deprecated
 	@JsonIgnore
 	public Boolean isPersonVoided() {
-		return getPersonVoided();
+		return super.isVoided();
 	}
 	
 	public User getPersonVoidedBy() {
-		return personVoidedBy;
+		return super.getVoidedBy();
 	}
 	
 	public void setPersonVoidedBy(User voidedBy) {
-		this.personVoidedBy = voidedBy;
-		this.setVoidedBy(voidedBy);
+		super.setVoidedBy(voidedBy);
 	}
 	
 	public String getPersonVoidReason() {
-		return personVoidReason;
+		return super.getVoidReason();
 	}
 	
 	public void setPersonVoidReason(String voidReason) {
-		this.personVoidReason = voidReason;
-		this.setVoidReason(voidReason);
+		super.setVoidReason(voidReason);
 	}
 	
 	/**

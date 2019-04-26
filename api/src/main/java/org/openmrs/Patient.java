@@ -54,7 +54,7 @@ public class Patient extends Person {
 	@Column(name="patient_id", updatable = false, insertable = false)
 	private Integer patientId;
 
-	@Column(name="allergy_status")
+	@Column(name="allergy_status", length = 50)
 	private String allergyStatus = Allergies.UNKNOWN;
 
 	@ManyToOne
@@ -75,14 +75,101 @@ public class Patient extends Person {
 	@JoinColumn(name = "voided_by")
 	private User voidedBy;
 
-	@Column(name = "void_reason", length = 255)
+	@Column(name = "void_reason")
 	private String voidReason;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@SortNatural 
 	@ContainedIn
 	private Set<PatientIdentifier> identifiers;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "changed_by")
+	private User changedBy;
+
+	@Column(name = "date_changed")
+	private Date dateChanged;
+
+	@Override
+	public User getCreator() {
+		return creator;
+	}
+
+	@Override
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+
+	@Override
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	@Override
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	@Override
+	public Boolean getVoided() {
+		return voided;
+	}
+
+	@Override
+	public void setVoided(Boolean voided) {
+		this.voided = voided;
+	}
+
+	@Override
+	public Date getDateVoided() {
+		return dateVoided;
+	}
+
+	@Override
+	public void setDateVoided(Date dateVoided) {
+		this.dateVoided = dateVoided;
+	}
+
+	@Override
+	public User getVoidedBy() {
+		return voidedBy;
+	}
+
+	@Override
+	public void setVoidedBy(User voidedBy) {
+		this.voidedBy = voidedBy;
+	}
+
+	@Override
+	public String getVoidReason() {
+		return voidReason;
+	}
+
+	@Override
+	public void setVoidReason(String voidReason) {
+		this.voidReason = voidReason;
+	}
+
+	@Override
+	public User getChangedBy() {
+		return changedBy;
+	}
+
+	@Override
+	public void setChangedBy(User changedBy) {
+		this.changedBy = changedBy;
+	}
+
+	@Override
+	public Date getDateChanged() {
+		return dateChanged;
+	}
+
+	@Override
+	public void setDateChanged(Date dateChanged) {
+		this.dateChanged = dateChanged;
+	}
+
 	// Constructors
 	
 	/** default constructor */
