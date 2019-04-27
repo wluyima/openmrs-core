@@ -116,7 +116,7 @@ public class Person extends BaseChangeableOpenmrsData {
 	private Boolean deathdateEstimated = false;
 
 	@Field
-	@Basic
+	@Column(nullable = false)
 	private Boolean dead = false;
 
 	@Column(name="death_date")

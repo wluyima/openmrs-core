@@ -44,7 +44,7 @@ public class Patient extends Person {
 	
 	public static final long serialVersionUID = 93123L;
 	
-	@Column(name="patient_id", updatable = false, insertable = false)
+	@Column(name="patient_id", nullable = false, updatable = false, insertable = false)
 	private Integer patientId;
 
 	@Column(name="allergy_status", length = 50)
@@ -71,17 +71,17 @@ public class Patient extends Person {
 	@Column(name = "void_reason")
 	private String voidReason;
 
-	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@SortNatural 
-	@ContainedIn
-	private Set<PatientIdentifier> identifiers;
-
 	@ManyToOne
 	@JoinColumn(name = "changed_by")
 	private User changedBy;
 
 	@Column(name = "date_changed")
 	private Date dateChanged;
+
+	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@SortNatural 
+	@ContainedIn
+	private Set<PatientIdentifier> identifiers;
 
 	@Override
 	public User getCreator() {
@@ -105,7 +105,7 @@ public class Patient extends Person {
 
 	@Override
 	public Boolean getVoided() {
-		return voided;
+		return this.voided;
 	}
 
 	@Override
