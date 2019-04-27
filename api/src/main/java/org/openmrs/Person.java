@@ -76,14 +76,14 @@ public class Person extends BaseChangeableOpenmrsData {
 	@DocumentId
 	protected Integer personId;
 	
-	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
 	@SortNatural
 	@OrderBy("voided asc, preferred desc, date_created desc")
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@BatchSize(size = 1000)
 	private Set<PersonAddress> addresses = null;
 
-	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
 	@SortNatural
 	@OrderBy("voided asc, preferred desc, date_created desc")
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -91,7 +91,7 @@ public class Person extends BaseChangeableOpenmrsData {
 	@ContainedIn
 	private Set<PersonName> names = null;
 
-	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
 	@SortNatural
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@BatchSize(size = 1000)
