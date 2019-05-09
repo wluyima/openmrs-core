@@ -177,29 +177,29 @@ public class PersonServiceTest extends BaseContextSensitiveTest {
 	}
 	
 	/*
-	 * Helper to create patient that does not have any existing relationships. Returns created Patient.
+	 * Helper to create person that does not have any existing relationships. Returns created Person.
 	 */
-	private Patient createTestPatient() {
-		Patient patient = new Patient();
+	private Person createTestPerson() {
+		Person person = new Person();
 		PersonName pName = new PersonName();
 		pName.setGivenName("Tom");
 		pName.setMiddleName("E.");
 		pName.setFamilyName("Patient");
-		patient.addName(pName);
+		person.addName(pName);
 		PersonAddress pAddress = new PersonAddress();
 		pAddress.setAddress1("123 My street");
 		pAddress.setAddress2("Apt 402");
 		pAddress.setCityVillage("Anywhere city");
 		pAddress.setCountry("Some Country");
-		Set<PersonAddress> pAddressList = patient.getAddresses();
+		Set<PersonAddress> pAddressList = person.getAddresses();
 		pAddressList.add(pAddress);
-		patient.setAddresses(pAddressList);
-		patient.addAddress(pAddress);
-		patient.setBirthdate(new Date());
-		patient.setBirthdateEstimated(true);
-		patient.setDeathDate(new Date());
-		patient.setCauseOfDeath(new Concept(1));
-		patient.setGender("male");
+		person.setAddresses(pAddressList);
+		person.addAddress(pAddress);
+		person.setBirthdate(new Date());
+		person.setBirthdateEstimated(true);
+		person.setDeathDate(new Date());
+		person.setCauseOfDeath(new Concept(1));
+		person.setGender("male");
 		List<PatientIdentifierType> patientIdTypes = ps.getAllPatientIdentifierTypes();
 		assertNotNull(patientIdTypes);
 		PatientIdentifier patientIdentifier = new PatientIdentifier();
@@ -207,12 +207,8 @@ public class PersonServiceTest extends BaseContextSensitiveTest {
 		patientIdentifier.setIdentifierType(patientIdTypes.get(0));
 		patientIdentifier.setLocation(new Location(1));
 		patientIdentifier.setPreferred(true);
-		Set<PatientIdentifier> patientIdentifiers = new TreeSet<>();
-		patientIdentifiers.add(patientIdentifier);
-		patient.setIdentifiers(patientIdentifiers);
 		
-		ps.savePatient(patient);
-		return patient;
+		return personService.savePerson(person);
 	}
 	
 	/*
@@ -319,12 +315,12 @@ public class PersonServiceTest extends BaseContextSensitiveTest {
 		executeDataSet(CREATE_RELATIONSHIP_XML);
 		
 		// TODO use xml imported in BaseContextSensitiveTest#baseSetupWithStandardDataAndAuthentication()
-		Patient patient = createTestPatient();
-		List<Relationship> rels = createTestDatedRelationships(ps.getPatient(2), patient, personService
+		Person person = createTestPerson();
+		List<Relationship> rels = createTestDatedRelationships(ps.getPatient(2), person, personService
 		        .getRelationshipType(4));
 		
 		// Get relationships effective 1988-01-01
-		List<Relationship> res = personService.getRelationshipsByPerson(patient, df.parse("1988-01-01"));
+		List<Relationship> res = personService.getRelationshipsByPerson(person, df.parse("1988-01-01"));
 		
 		// Verify # of results and which results we have received
 		assertEquals(5, res.size());
@@ -953,12 +949,12 @@ public class PersonServiceTest extends BaseContextSensitiveTest {
 		executeDataSet(CREATE_RELATIONSHIP_XML);
 		
 		// TODO use xml imported in BaseContextSensitiveTest#baseSetupWithStandardDataAndAuthentication()
-		Patient patient = createTestPatient();
-		List<Relationship> rels = createTestDatedRelationships(ps.getPatient(2), patient, personService
+		Person person = createTestPerson();
+		List<Relationship> rels = createTestDatedRelationships(ps.getPatient(2), person, personService
 		        .getRelationshipType(4));
 		
 		// Get relationships effective 1988-01-01
-		List<Relationship> res = personService.getRelationships(ps.getPatient(2), patient, null, df.parse("1988-01-01"));
+		List<Relationship> res = personService.getRelationships(ps.getPatient(2), person, null, df.parse("1988-01-01"));
 		
 		// Verify # of results and which results we have received
 		assertEquals(5, res.size());
@@ -1045,12 +1041,12 @@ public class PersonServiceTest extends BaseContextSensitiveTest {
 		executeDataSet(CREATE_RELATIONSHIP_XML);
 		
 		// TODO use xml imported in BaseContextSensitiveTest#baseSetupWithStandardDataAndAuthentication()
-		Patient patient = createTestPatient();
-		List<Relationship> rels = createTestDatedRelationships(ps.getPatient(2), patient, personService
+		Person person = createTestPerson();
+		List<Relationship> rels = createTestDatedRelationships(ps.getPatient(2), person, personService
 		        .getRelationshipType(4));
 		
 		// Get relationships effective between 1987-01-01 and 1988-01-01
-		List<Relationship> res = personService.getRelationships(ps.getPatient(2), patient, null, df.parse("1987-01-01"), df
+		List<Relationship> res = personService.getRelationships(ps.getPatient(2), person, null, df.parse("1987-01-01"), df
 		        .parse("1988-01-01"));
 		
 		// Verify # of results and which results we have received
