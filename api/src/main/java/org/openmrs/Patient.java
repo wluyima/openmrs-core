@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,6 +60,7 @@ public class Patient extends Person {
 	@JoinColumn(name = "creator", updatable = false)
 	private User creator;
 	
+	@Access(AccessType.PROPERTY)
 	@Column(name = "date_created", nullable = false, updatable = false, length = 19)
 	private Date dateCreated;
 	
@@ -146,6 +149,9 @@ public class Patient extends Person {
 	 * @return internal identifier for patient
 	 */
 	public Integer getPatientId() {
+		if (this.patientId == null) {
+			this.patientId = getPersonId();
+		}
 		return this.patientId;
 	}
 	
@@ -219,7 +225,13 @@ public class Patient extends Person {
 	 * @see org.openmrs.PatientIdentifier
 	 */
 	public void setIdentifiers(Set<PatientIdentifier> identifiers) {
-		this.identifiers = identifiers;
+		if (identifiers == null) {
+			this.identifiers = null;
+		} else {
+			for (PatientIdentifier id : identifiers) {
+				addIdentifier(id);
+			}
+		}
 	}
 	
 	/**
@@ -447,4 +459,133 @@ public class Patient extends Person {
 	public Person getPerson() {
 		return this;
 	}
+	
+	/**
+	 * @see Person#getCreator()
+	 */
+	@Override
+	public User getCreator() {
+		return creator;
+	}
+	
+	/**
+	 * @see Person#setCreator(User)
+	 */
+	@Override
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+	
+	/**
+	 * @see Person#getDateCreated()
+	 */
+	@Override
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+	
+	/**
+	 * @see Person#setDateCreated(Date)
+	 */
+	@Override
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+	
+	/**
+	 * @see Person#getVoided()
+	 */
+	@Override
+	public Boolean getVoided() {
+		return voided;
+	}
+	
+	/**
+	 * @see Person#setVoided(Boolean)
+	 */
+	@Override
+	public void setVoided(Boolean voided) {
+		this.voided = voided;
+	}
+	
+	/**
+	 * @see Person#getDateVoided()
+	 */
+	@Override
+	public Date getDateVoided() {
+		return dateVoided;
+	}
+	
+	/**
+	 * @see Person#setDateVoided(Date)
+	 */
+	@Override
+	public void setDateVoided(Date dateVoided) {
+		this.dateVoided = dateVoided;
+	}
+	
+	/**
+	 * @see Person#getVoidedBy()
+	 */
+	@Override
+	public User getVoidedBy() {
+		return voidedBy;
+	}
+	
+	/**
+	 * @see Person#setVoidedBy(User)
+	 */
+	@Override
+	public void setVoidedBy(User voidedBy) {
+		this.voidedBy = voidedBy;
+	}
+	
+	/**
+	 * @see Person#getVoidReason()
+	 */
+	@Override
+	public String getVoidReason() {
+		return voidReason;
+	}
+	
+	/**
+	 * @see Person#setVoidReason(String)
+	 */
+	@Override
+	public void setVoidReason(String voidReason) {
+		this.voidReason = voidReason;
+	}
+	
+	/**
+	 * @see Person#getChangedBy()
+	 */
+	@Override
+	public User getChangedBy() {
+		return changedBy;
+	}
+	
+	/**
+	 * @see Person#setChangedBy(User)
+	 */
+	@Override
+	public void setChangedBy(User changedBy) {
+		this.changedBy = changedBy;
+	}
+	
+	/**
+	 * @see Person#getDateChanged()
+	 */
+	@Override
+	public Date getDateChanged() {
+		return dateChanged;
+	}
+	
+	/**
+	 * @see Person#setDateChanged(Date)
+	 */
+	@Override
+	public void setDateChanged(Date dateChanged) {
+		this.dateChanged = dateChanged;
+	}
+	
 }
