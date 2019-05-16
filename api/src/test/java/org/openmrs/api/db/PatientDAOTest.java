@@ -1822,6 +1822,7 @@ public class PatientDAOTest extends BaseContextSensitiveTest {
 	 */
 	@Test
 	public void getCountOfPatients_shouldNotCountVoidedPatients_SignatureNo1() {
+		updateSearchIndex();
 		long patientCount = dao.getCountOfPatients("Meriadoc Brandybuck");
 		Assert.assertEquals(0, patientCount);
 	}

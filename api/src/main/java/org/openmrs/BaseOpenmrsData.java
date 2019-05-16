@@ -17,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.search.annotations.Field;
 
 /**
@@ -32,6 +34,7 @@ public abstract class BaseOpenmrsData extends BaseOpenmrsObject implements Openm
 	
 	//***** Properties *****
 	@ManyToOne(optional = false)
+	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name = "creator", updatable = false)
 	protected User creator;
 	
@@ -39,6 +42,7 @@ public abstract class BaseOpenmrsData extends BaseOpenmrsObject implements Openm
 	private Date dateCreated;
 	
 	@ManyToOne
+	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name = "changed_by")
 	private User changedBy;
 	
@@ -53,6 +57,7 @@ public abstract class BaseOpenmrsData extends BaseOpenmrsObject implements Openm
 	private Date dateVoided;
 	
 	@ManyToOne
+	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name = "voided_by")
 	private User voidedBy;
 	

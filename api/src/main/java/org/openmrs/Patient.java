@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +26,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.SortNatural;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
 
@@ -52,38 +55,41 @@ public class Patient extends Person {
 	private String allergyStatus = Allergies.UNKNOWN;
 	
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
-	@SortNatural
+	@LazyCollection(LazyCollectionOption.TRUE)
+	@Sort(type = SortType.NATURAL)
 	@ContainedIn
 	private Set<PatientIdentifier> identifiers;
 	
 	@ManyToOne
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	@JoinColumn(name = "creator", updatable = false)
-	private User creator;
+	private User patientCreator;
 	
-	@Access(AccessType.PROPERTY)
 	@Column(name = "date_created", nullable = false, updatable = false, length = 19)
-	private Date dateCreated;
+	private Date patientDateCreated;
 	
 	@Column(name = "voided", nullable = false)
 	@Field
-	private Boolean voided = Boolean.FALSE;
+	private Boolean patientVoided = Boolean.FALSE;
 	
 	@Column(name = "date_voided", length = 19)
-	private Date dateVoided;
+	private Date patientDateVoided;
 	
 	@ManyToOne
+	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name = "voided_by")
-	private User voidedBy;
+	private User patientVoidedBy;
 	
 	@Column(name = "void_reason")
-	private String voidReason;
+	private String patientVoidReason;
 	
 	@ManyToOne
+	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name = "changed_by")
-	private User changedBy;
+	private User patientChangedBy;
 	
 	@Column(name = "date_changed", length = 19)
-	private Date dateChanged;
+	private Date patientDateChanged;
 	
 	// Constructors
 	
@@ -465,7 +471,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public User getCreator() {
-		return creator;
+		return patientCreator;
 	}
 	
 	/**
@@ -473,7 +479,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public void setCreator(User creator) {
-		this.creator = creator;
+		this.patientCreator = creator;
 	}
 	
 	/**
@@ -481,7 +487,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public Date getDateCreated() {
-		return dateCreated;
+		return patientDateCreated;
 	}
 	
 	/**
@@ -489,7 +495,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
+		this.patientDateCreated = dateCreated;
 	}
 	
 	/**
@@ -497,7 +503,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public Boolean getVoided() {
-		return voided;
+		return patientVoided;
 	}
 	
 	/**
@@ -505,7 +511,8 @@ public class Patient extends Person {
 	 */
 	@Override
 	public void setVoided(Boolean voided) {
-		this.voided = voided;
+		this.patientVoided = voided;
+		super.setVoided(voided);
 	}
 	
 	/**
@@ -513,7 +520,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public Date getDateVoided() {
-		return dateVoided;
+		return patientDateVoided;
 	}
 	
 	/**
@@ -521,7 +528,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public void setDateVoided(Date dateVoided) {
-		this.dateVoided = dateVoided;
+		this.patientDateVoided = dateVoided;
 	}
 	
 	/**
@@ -529,7 +536,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public User getVoidedBy() {
-		return voidedBy;
+		return patientVoidedBy;
 	}
 	
 	/**
@@ -537,7 +544,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public void setVoidedBy(User voidedBy) {
-		this.voidedBy = voidedBy;
+		this.patientVoidedBy = voidedBy;
 	}
 	
 	/**
@@ -545,7 +552,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public String getVoidReason() {
-		return voidReason;
+		return patientVoidReason;
 	}
 	
 	/**
@@ -553,7 +560,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public void setVoidReason(String voidReason) {
-		this.voidReason = voidReason;
+		this.patientVoidReason = voidReason;
 	}
 	
 	/**
@@ -561,7 +568,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public User getChangedBy() {
-		return changedBy;
+		return patientChangedBy;
 	}
 	
 	/**
@@ -569,7 +576,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public void setChangedBy(User changedBy) {
-		this.changedBy = changedBy;
+		this.patientChangedBy = changedBy;
 	}
 	
 	/**
@@ -577,7 +584,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public Date getDateChanged() {
-		return dateChanged;
+		return patientDateChanged;
 	}
 	
 	/**
@@ -585,7 +592,7 @@ public class Patient extends Person {
 	 */
 	@Override
 	public void setDateChanged(Date dateChanged) {
-		this.dateChanged = dateChanged;
+		this.patientDateChanged = dateChanged;
 	}
 	
 }

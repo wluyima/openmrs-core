@@ -24,7 +24,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,7 +43,12 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.SortNatural;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
@@ -76,30 +80,33 @@ public class Person extends BaseChangeableOpenmrsData {
 	@DocumentId
 	protected Integer personId;
 	
-	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@SortNatural
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@Sort(type = SortType.NATURAL)
 	@OrderBy("voided asc, preferred desc, date_created desc")
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@BatchSize(size = 1000)
 	private Set<PersonAddress> addresses = null;
 	
-	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@SortNatural
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@Sort(type = SortType.NATURAL)
 	@OrderBy("voided asc, preferred desc, date_created desc")
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@BatchSize(size = 1000)
 	@ContainedIn
 	private Set<PersonName> names = null;
 	
-	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@SortNatural
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@Sort(type = SortType.NATURAL)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@BatchSize(size = 1000)
 	@ContainedIn
 	private Set<PersonAttribute> attributes = null;
 	
 	@Field
-	@Column(length = 50, nullable = false)
+	@Column(length = 50)
 	private String gender;
 	
 	@Column(name = "birthdate", length = 10)
@@ -123,6 +130,7 @@ public class Person extends BaseChangeableOpenmrsData {
 	private Date deathDate;
 	
 	@ManyToOne
+	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name = "cause_of_death")
 	private Concept causeOfDeath;
 	
@@ -130,6 +138,7 @@ public class Person extends BaseChangeableOpenmrsData {
 	private String causeOfDeathNonCoded;
 	
 	@ManyToOne
+	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name = "creator", updatable = false, insertable = false)
 	private User personCreator;
 	
@@ -137,6 +146,7 @@ public class Person extends BaseChangeableOpenmrsData {
 	private Date personDateCreated;
 	
 	@ManyToOne
+	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name = "changed_by", updatable = false, insertable = false)
 	private User personChangedBy;
 	
@@ -147,6 +157,7 @@ public class Person extends BaseChangeableOpenmrsData {
 	private Boolean personVoided = false;
 	
 	@ManyToOne
+	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name = "voided_by", updatable = false, insertable = false)
 	private User personVoidedBy;
 	

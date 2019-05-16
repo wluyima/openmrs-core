@@ -848,9 +848,10 @@ public class HibernatePatientDAO implements PatientDAO {
 		
 	private LuceneQuery<PatientIdentifier> getPatientIdentifierLuceneQuery(String query, boolean includeVoided, boolean matchExactly) {
 	    LuceneQuery<PatientIdentifier> luceneQuery = getPatientIdentifierLuceneQuery(query, matchExactly);
-		if(!includeVoided){
+		
+	    if(!includeVoided){
         	luceneQuery.include("voided", false);
-			luceneQuery.include("patient.voided", false);
+			luceneQuery.include("patient.patientVoided", false);
         }
 
         luceneQuery.include("patient.isPatient", true);
